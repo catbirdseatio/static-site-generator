@@ -75,36 +75,56 @@ const process_file = async (filename, template, outpath) => {
 };
 
 
-
 (async () => {
   const src_path = path.join(path.resolve("src"));
-  const output_path = path.join(path.resolve("dist"));
+  const target_path = path.join(path.resolve("dist"));
   const page_template = await fs.readFile(
     path.join(src_path, "layouts", "layout.html"),
     "utf-8"
   );
 
+  // Write a source asset (css, js) to the target directory
+  // Function must be defined inside the IIFE to use the target directory variable
+  const process_asset = async (asset) => {
+    // create a new path
+    const extension = asset.split(".").pop();
+    const asset_path = path.join(target_path, extension);
+    const new_filename = get_output_filename(asset, asset_path, extension);
+    console.log(new_filename);
+  
+    // get contents of files
+    const contents = await fs.readFile(asset);
+  
+    // write file to path
+    save_file(new_filename, contents);
+  }
+
+  // Process an image file
+  // This function is similar to, but very different from process_asset
+  const process_image = async (image) => {
+    // create a new path
+    const extension = image.split(".").pop();
+    const image_path = path.join(target_path, 'img');
+    const new_filename = get_output_filename(image, image_path, extension);
+  
+    // get contents of files
+    const contents = await fs.readFile(image);
+  
+    // write file to path
+    save_file(new_filename, contents);
+  }
+
   // Get src assets
   const filenames = fg.sync(src_path + "/pages/**/*.md");
   const assets = fg.sync(src_path + "/**/*.{css,js}");
+  const images = fg.sync(src_path + "/**/*.{jpg, png, gif}");
 
   // Save assets to the dist folder
-  assets.forEach(async (asset) => {
-    // create a new path
-    const extension = asset.split(".").pop();
-    const asset_path = path.join(output_path, extension);
-    const new_filename = get_output_filename(asset, asset_path, extension);
-    console.log(new_filename);
-
-    // get contents of files
-    const contents = await fs.readFile(asset, "utf-8");
-
-    // write file to path
-    save_file(new_filename, contents);
-  });
+  assets.forEach(process_asset);
+  images.forEach(process_image);
 
   // write the pages
   filenames.forEach(
-    async (filename) => await process_file(filename, page_template, output_path)
+    async (filename) => await process_file(filename, page_template, target_path)
   );
 })();

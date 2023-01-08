@@ -5,3 +5,7 @@
 body {
     background: rebeccapurple;
 }
+
+img {
+    max-width: 25rem;
+}
