@@ -5,7 +5,6 @@ import { marked } from "marked";
 import ejs from "ejs";
 import mkdirp from "mkdirp";
 import fg from "fast-glob";
-import { unlink } from "fs";
 
 const marked_options = {
   headerIds: false,
