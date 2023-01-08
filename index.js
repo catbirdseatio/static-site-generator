@@ -75,20 +75,6 @@ const process_file = async (filename, template, outpath) => {
   }
 };
 
-// Remove all items from the build directory
-const clear_dist = async dist_path => {
-  const files = fs.readdir(dist_path);
-
-  (await files).forEach(async file => {
-    const filename = `${dist_path}/${file}`;
-    const filename_stats = await fs.stat(filename);
-    if (filename_stats.isDirectory()) await fs.rm(filename,{recursive: true});
-    else unlink(filename, (err => {
-      if (err) console.log(err);
-      else `deleted file: ${filename}`;
-    }));
-  })
- }
 
 
 (async () => {
@@ -98,9 +84,6 @@ const clear_dist = async dist_path => {
     path.join(src_path, "layouts", "layout.html"),
     "utf-8"
   );
-
-  // TODO: clear dist folder of contents
- clear_dist(output_path);
 
   // Get src assets
   const filenames = fg.sync(src_path + "/pages/**/*.md");
