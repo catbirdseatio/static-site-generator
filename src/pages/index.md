@@ -8,4 +8,4 @@ title: Welcome to the Website!
 <%= title %>
 
 ## NEW FILE
-![Test Image](./img/pexels-athena-2994342.jpg)
+![Badwater Basin by Athena from unsplash.com](./img/pexels-athena-2994342.jpg)
