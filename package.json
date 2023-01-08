@@ -1,0 +1,19 @@
+{
+  "name": "site_generator",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "fast-glob": "^3.2.12",
+    "gray-matter": "^4.0.3",
+    "marked": "^4.2.5",
+    "mkdirp": "^1.0.4"
+  }
+}
