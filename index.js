@@ -83,7 +83,7 @@ const process_file = async (filename, template, outpath) => {
   );
 
   // clear the dist directory
-  await fs.rm(output_path, { recursive: true });
+  // await fs.rm(output_path, { recursive: true });
 
   // Get src assets
   const filenames = fg.sync(src_path + "/pages/**/*.md");
