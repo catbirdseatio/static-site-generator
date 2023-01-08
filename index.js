@@ -5,6 +5,7 @@ import { marked } from "marked";
 import ejs from "ejs";
 import mkdirp from "mkdirp";
 import fg from "fast-glob";
+import { unlink } from "fs";
 
 const marked_options = {
   headerIds: false,
@@ -74,6 +75,22 @@ const process_file = async (filename, template, outpath) => {
   }
 };
 
+// Remove all items from the build directory
+const clear_dist = async dist_path => {
+  const files = fs.readdir(dist_path);
+
+  (await files).forEach(async file => {
+    const filename = `${dist_path}/${file}`;
+    const filename_stats = await fs.stat(filename);
+    if (filename_stats.isDirectory()) await fs.rm(filename,{recursive: true});
+    else unlink(filename, (err => {
+      if (err) console.log(err);
+      else `deleted file: ${filename}`;
+    }));
+  })
+ }
+
+
 (async () => {
   const src_path = path.join(path.resolve("src"));
   const output_path = path.join(path.resolve("dist"));
@@ -82,8 +99,8 @@ const process_file = async (filename, template, outpath) => {
     "utf-8"
   );
 
-  // clear the dist directory
-  // await fs.rm(output_path, { recursive: true });
+  // TODO: clear dist folder of contents
+ clear_dist(output_path);
 
   // Get src assets
   const filenames = fg.sync(src_path + "/pages/**/*.md");
